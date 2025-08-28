@@ -2,7 +2,8 @@ spring:
   application:
     name: msvc-notifications
 
-
+server:
+  port: ${MSVC_NOTIFICATION_PORT:9095}
 
 springdoc:
   api-docs:
