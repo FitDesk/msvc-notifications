@@ -3,6 +3,7 @@ package com.msvcnotifications.config.kafka;
 import com.msvcnotifications.exceptions.NotRetryableException;
 import com.msvcnotifications.exceptions.RetryableException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,15 +23,20 @@ import org.springframework.util.backoff.FixedBackOff;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class KafkaConsumerConfig {
 
-    @Value("${spring.kafka.consumer.bootstrap-servers}")
-    private String bootstrapServers;
-    @Value("${spring.kafka.consumer.group-id}")
-    private String groupId;
+     @Value("${spring.kafka.consumer.bootstrap-servers}")
+     private String bootstrapServers;
+     @Value("${spring.kafka.consumer.group-id}")
+     private String groupId;
 
     @Bean
     public ConsumerFactory<String, Object> consumerFactory() {
+
+        log.info(" Valor de BootstrapServers {}",bootstrapServers);
+        log.info(" Valor de groupId {}",groupId);
+
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.putIfAbsent(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);

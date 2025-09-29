@@ -16,24 +16,24 @@ public class KafkaNotificationListener {
     private final NotificationRepository repository;
     private final SimpMessagingTemplate wsTemplate;
 
-    @KafkaListener(topics = "user.created", groupId = "notifications-service")
-    public void onUserCreated(Map<String, Object> event) {
-        Map<String, Object> user = (Map<String, Object>) event.get("user");
-        String title = "Nuevo usuario registrado";
-        String body = "Usuario" + user.get("username") + "-" + user.get("email");
+    // @KafkaListener(topics = "user.created")
+    // public void onUserCreated(Map<String, Object> event) {
+    //     Map<String, Object> user = (Map<String, Object>) event.get("user");
+    //     String title = "Nuevo usuario registrado";
+    //     String body = "Usuario" + user.get("username") + "-" + user.get("email");
 
-        NotificationEntity notification = NotificationEntity
-                .builder()
-                .title(title)
-                .body(body)
-                .target("ADMIN")
-                .readFlag(false)
-                .createdAt(Instant.now())
-                .build();
+    //     NotificationEntity notification = NotificationEntity
+    //             .builder()
+    //             .title(title)
+    //             .body(body)
+    //             .target("ADMIN")
+    //             .readFlag(false)
+    //             .createdAt(Instant.now())
+    //             .build();
 
-        repository.save(notification);
-        wsTemplate.convertAndSend("/topic/admin/notifications", Map.of("notification", notification));
+    //     repository.save(notification);
+    //     wsTemplate.convertAndSend("/topic/admin/notifications", Map.of("notification", notification));
 
-    }
+    // }
 
 }

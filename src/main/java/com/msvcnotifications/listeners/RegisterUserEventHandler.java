@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-@KafkaListener(topics = "user-created-event-topic")
+//@KafkaListener(topics = "user-created-event-topic")
 @RequiredArgsConstructor
 @Slf4j
 public class RegisterUserEventHandler {
 
-    @KafkaHandler
+    @KafkaListener(topics = "user-created-event-topic")
     @Transactional
     public void handle(NotificationEvent message) {
-        log.info("Mensaje recibido {}", message.message());
+        log.info("Mensaje recibido: {}", message);
     }
 
 }
