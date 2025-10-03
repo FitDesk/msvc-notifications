@@ -1,9 +1,9 @@
 package com.msvcnotifications.listeners;
 
+import com.msvcnotifications.events.CreatedUserEvent;
 import com.msvcnotifications.events.NotificationEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +16,8 @@ public class RegisterUserEventHandler {
 
     @KafkaListener(topics = "user-created-event-topic")
     @Transactional
-    public void handle(NotificationEvent message) {
-        log.info("Mensaje recibido: {}", message);
+    public void handle(CreatedUserEvent message) {
+        log.info("Usuario recibido: {}", message);
     }
 
 }
