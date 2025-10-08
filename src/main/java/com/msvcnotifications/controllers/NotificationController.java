@@ -1,7 +1,6 @@
 package com.msvcnotifications.controllers;
 
 import com.msvcnotifications.services.EmailService;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,6 @@
 package com.msvcnotifications.services;
 
-public class EmailService {
+
+public interface EmailService {
+    void sendConfirmationEmail(String to, String firstName);
 }
