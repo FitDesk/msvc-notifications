@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 80%, #120458 0%, #000000 50%, #7c0a9c 100%);
+            font-family: 'Orbitron', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Partículas flotantes */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .particle:nth-child(1) { width: 6px; height: 6px; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 4px; height: 4px; left: 20%; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 8px; height: 8px; left: 30%; animation-delay: 4s; }
+        .particle:nth-child(4) { width: 5px; height: 5px; left: 40%; animation-delay: 6s; }
+        .particle:nth-child(5) { width: 7px; height: 7px; left: 50%; animation-delay: 8s; }
+        .particle:nth-child(6) { width: 4px; height: 4px; left: 60%; animation-delay: 10s; }
+        .particle:nth-child(7) { width: 6px; height: 6px; left: 70%; animation-delay: 12s; }
+        .particle:nth-child(8) { width: 5px; height: 5px; left: 80%; animation-delay: 14s; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg,
+            rgba(255,255,255,0.1) 0%,
+            rgba(255,255,255,0.05) 50%,
+            rgba(255,255,255,0.1) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255,255,255,0.2);
+            max-width: 700px;
+            margin: 80px auto;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow:
+                    0 25px 50px rgba(0,255,255,0.3),
+                    0 0 100px rgba(255,0,255,0.2),
+                    inset 0 1px 0 rgba(255,255,255,0.2);
+            animation: containerGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes containerGlow {
+            0% { box-shadow: 0 25px 50px rgba(0,255,255,0.3), 0 0 100px rgba(255,0,255,0.2); }
+            100% { box-shadow: 0 25px 50px rgba(255,0,255,0.4), 0 0 120px rgba(0,255,255,0.3); }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-text {
+            font-size: 3.5em;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ff00);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 2s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(0,255,255,0.5);
+            letter-spacing: 3px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        h2 {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 0 0 20px rgba(0,255,255,0.8);
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes textPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .welcome-name {
+            color: #00ffff;
+            text-shadow: 0 0 30px #00ffff;
+            animation: nameGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes nameGlow {
+            0% { color: #00ffff; text-shadow: 0 0 30px #00ffff; }
+            100% { color: #ff00ff; text-shadow: 0 0 30px #ff00ff; }
+        }
+
+        p {
+            color: #e0e0e0;
+            font-size: 1.2em;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        .highlight {
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 20px 50px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+            background-size: 300% 300%;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.4em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: btnGradient 3s ease-in-out infinite;
+            box-shadow:
+                    0 10px 30px rgba(255,0,255,0.4),
+                    0 0 50px rgba(0,255,255,0.3);
+        }
+
+        @keyframes btnGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow:
+                    0 20px 40px rgba(255,0,255,0.6),
+                    0 0 80px rgba(0,255,255,0.5);
+        }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+            animation: iconSpin 2s linear infinite;
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .footer p {
+            font-size: 1.1em;
+            color: #b0b0b0;
+        }
+
+        .team-name {
+            color: #00ffff;
+            font-weight: 700;
+            text-shadow: 0 0 15px #00ffff;
+        }
+
+        /* Efecto holográfico */
+        .hologram {
+            position: relative;
+        }
+
+        .hologram::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                    90deg,
+                    transparent 0%,
+                    rgba(255,255,255,0.1) 50%,
+                    transparent 100%
+            );
+            animation: hologramEffect 3s ease-in-out infinite;
+        }
+
+        @keyframes hologramEffect {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { margin: 20px; padding: 30px 20px; }
+            .logo-text { font-size: 2.5em; }
+            h2 { font-size: 1.8em; }
+            p { font-size: 1em; }
+            .btn { padding: 15px 30px; font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+<!-- Partículas flotantes -->
+<div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+
+<div class="container hologram">
+    <div class="logo">
+        <div class="logo-text">🚀 FITDESK 🚀</div>
+    </div>
+
+    <h2>¡Bienvenido <span class="welcome-name" th:text="${firstName}">Usuario</span>!</h2>
+
+    <p>Tu cuenta ha sido <span class="highlight">creada exitosamente</span> en nuestro universo digital.</p>
+
+    <p>Prepárate para una experiencia <span class="highlight">futurística</span> y llena de energía cósmica.</p>
+
+    <div class="btn-container">
+        <a th:href="${confirmationLink}" class="btn">
+            <span class="icon">⚡</span>ACTIVAR CUENTA⚡
+        </a>
+    </div>
+
+    <div class="footer">
+        <p>Saludos intergalácticos,<br>
+            El equipo <span class="team-name">FitDesk</span> 🌟</p>
+    </div>
+</div>
+</body>
+</html>
