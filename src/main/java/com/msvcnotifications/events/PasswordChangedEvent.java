@@ -1,4 +1,6 @@
 package com.msvcnotifications.events;
 
-public class PasswordChangedEvent {
-}
+public record PasswordChangedEvent(
+        String userId,
+        String email
+) {}

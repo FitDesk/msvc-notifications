@@ -8,6 +8,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import jakarta.mail.MessagingException;
+
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @Service
@@ -15,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
+    private final TemplateEngine templateEngine;
 
 
     @Value("${app.email.from}")
@@ -22,6 +30,10 @@ public class EmailServiceImpl implements EmailService {
 
     @Value("${app.email.welcome.subject}")
     private String welcomeSubject;
+
+    @Value("${app.email.password-changed.subject}")
+    private String passwordChangedSubject;
+
 
     @Override
     public void sendConfirmationEmail(String to, String firstName) {
@@ -43,6 +55,32 @@ public class EmailServiceImpl implements EmailService {
 
         } catch (Exception e) {
             log.error("Error enviando email a {}: {}", to, e.getMessage());
+            throw new RuntimeException("Error enviando email de confirmación", e);
+        }
+    }
+
+    public void sendPasswordChangedConfirmation(String email) {
+        try {
+            Context context = new Context();
+            context.setVariable("email", email);
+            context.setVariable("changeDate", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+
+
+            String htmlContent = templateEngine.process("password-changed-email", context);
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(fromEmail);
+            helper.setTo(email);
+            helper.setSubject(passwordChangedSubject);
+            helper.setText(htmlContent, true);
+
+            mailSender.send(message);
+            log.info("Email de confirmación de cambio de contraseña enviado exitosamente a: {}", email);
+
+        } catch (MessagingException e) {
+            log.error("Error enviando email de confirmación de cambio de contraseña a {}: {}", email, e.getMessage());
             throw new RuntimeException("Error enviando email de confirmación", e);
         }
     }
