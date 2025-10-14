@@ -1,5 +1,6 @@
 package com.msvcnotifications.services.implemts;
 
+import com.msvcnotifications.events.PaymentApprovedEvent;
 import com.msvcnotifications.services.EmailService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,9 @@ public class EmailServiceImpl implements EmailService {
     @Value("${app.email.password-changed.subject}")
     private String passwordChangedSubject;
 
+    @Value("${app.email.transaction-notification.subject}")
+    private String transactionNotificationSubject;
+
 
     @Override
     public void sendConfirmationEmail(String to, String firstName) {
@@ -59,6 +63,7 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Override
     public void sendPasswordChangedConfirmation(String email) {
         try {
             Context context = new Context();
@@ -82,6 +87,55 @@ public class EmailServiceImpl implements EmailService {
         } catch (MessagingException e) {
             log.error("Error enviando email de confirmación de cambio de contraseña a {}: {}", email, e.getMessage());
             throw new RuntimeException("Error enviando email de confirmación", e);
+        }
+    }
+
+    @Override
+    public void sendTransactionNotificationEmail(PaymentApprovedEvent paymentEvent) {
+        try {
+            Context context = new Context();
+
+            // Datos del usuario y transacción
+            context.setVariable("userName", paymentEvent.userName());
+            context.setVariable("userEmail", paymentEvent.userEmail());
+            context.setVariable("planName", paymentEvent.planName());
+            context.setVariable("durationMonths", paymentEvent.durationMonths());
+            context.setVariable("amount", paymentEvent.amount());
+            context.setVariable("transactionId", paymentEvent.mercadoPagoTransactionId());
+            context.setVariable("paymentId", paymentEvent.paymentId().toString());
+            context.setVariable("externalReference", paymentEvent.externalReference());
+
+
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+            context.setVariable("paymentDate", paymentEvent.paymentDate().format(dateTimeFormatter));
+
+            LocalDateTime startDate = LocalDateTime.now();
+            LocalDateTime endDate = startDate.plusMonths(paymentEvent.durationMonths());
+            context.setVariable("planStartDate", startDate.format(dateFormatter));
+            context.setVariable("planEndDate", endDate.format(dateFormatter));
+
+            context.setVariable("currentYear", LocalDateTime.now().getYear());
+
+            String htmlContent = templateEngine.process("transaction-notification-email", context);
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(fromEmail);
+            helper.setTo(paymentEvent.userEmail());
+            helper.setSubject(transactionNotificationSubject);
+            helper.setText(htmlContent, true);
+
+            mailSender.send(message);
+            log.info("📧 Email de notificación de transacción enviado exitosamente a: {} - Plan: {} - Monto: ${}",
+                    paymentEvent.userEmail(), paymentEvent.planName(), paymentEvent.amount());
+
+        } catch (MessagingException e) {
+            log.error("❌ Error enviando email de notificación de transacción para {}: {}",
+                    paymentEvent.userEmail(), e.getMessage());
+            throw new RuntimeException("Error enviando email de notificación de transacción", e);
         }
     }
 }

@@ -47,7 +47,10 @@ public class KafkaConsumerConfig {
         config.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         config.put(JsonDeserializer.TYPE_MAPPINGS,
-         "NotificationEvent:com.msvcnotifications.events.NotificationEvent,CreatedUserEvent:com.msvcnotifications.events.CreatedUserEvent,PaymentApprovedEvent:com.msvcnotifications.events.PaymentApprovedEvent,PasswordChangedEvent:com.msvcnotifications.events.PasswordChangedEvent");
+         "NotificationEvent:com.msvcnotifications.events.NotificationEvent," +
+                 "CreatedUserEvent:com.msvcnotifications.events.CreatedUserEvent," +
+                 "PaymentApprovedEvent:com.msvcnotifications.events.PaymentApprovedEvent," +
+                 "PasswordChangedEvent:com.msvcnotifications.events.PasswordChangedEvent");
         config.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         return new DefaultKafkaConsumerFactory<>(config);
     }
