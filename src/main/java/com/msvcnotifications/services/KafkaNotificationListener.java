@@ -1,7 +1,5 @@
 package com.msvcnotifications.services;
 
-import com.msvcnotifications.entities.NotificationEntity;
-import com.msvcnotifications.repositories.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -11,10 +9,7 @@ import java.time.Instant;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class KafkaNotificationListener {
-    private final NotificationRepository repository;
-    private final SimpMessagingTemplate wsTemplate;
 
     // @KafkaListener(topics = "user.created")
     // public void onUserCreated(Map<String, Object> event) {
