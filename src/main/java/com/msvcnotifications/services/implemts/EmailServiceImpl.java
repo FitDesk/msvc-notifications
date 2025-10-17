@@ -2,10 +2,12 @@ package com.msvcnotifications.services.implemts;
 
 import com.msvcnotifications.events.PaymentApprovedEvent;
 import com.msvcnotifications.services.EmailService;
+import com.msvcnotifications.services.JasperReportService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
+    private final JasperReportService jasperReportService; // ← SOLO AGREGAR ESTA LÍNEA
 
 
     @Value("${app.email.from}")
@@ -42,23 +45,24 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendConfirmationEmail(String to, String firstName) {
         try {
+            Context context = new Context();
+            context.setVariable("firstName", firstName);
+            context.setVariable("currentYear", LocalDateTime.now().getYear());
+
+            String htmlContent = templateEngine.process("welcome-email", context);
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-            String body = "<p>Hola " + firstName + ",</p>" +
-                    "<p>¡Bienvenido a FitDesk! Tu cuenta ha sido creada exitosamente.</p>" +
-                    "<p>Saludos,<br>El equipo de FitDesk</p>";
 
             helper.setFrom(fromEmail);
             helper.setTo(to);
             helper.setSubject(welcomeSubject);
-            helper.setText(body, true);
+            helper.setText(htmlContent, true);
 
             mailSender.send(message);
-            log.info("Email enviado exitosamente a: {}", to);
+            log.info("📧 Email de bienvenida enviado exitosamente a: {}", to);
 
-        } catch (Exception e) {
-            log.error("Error enviando email a {}: {}", to, e.getMessage());
+        } catch (MessagingException e) {
+            log.error("❌ Error enviando email de bienvenida a {}: {}", to, e.getMessage());
             throw new RuntimeException("Error enviando email de confirmación", e);
         }
     }
@@ -95,7 +99,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             Context context = new Context();
 
-            // Datos del usuario y transacción
+            // MISMOS DATOS QUE YA TENÍAS - SIN CAMBIOS
             context.setVariable("userName", paymentEvent.userName());
             context.setVariable("userEmail", paymentEvent.userEmail());
             context.setVariable("planName", paymentEvent.planName());
@@ -104,7 +108,6 @@ public class EmailServiceImpl implements EmailService {
             context.setVariable("transactionId", paymentEvent.mercadoPagoTransactionId());
             context.setVariable("paymentId", paymentEvent.paymentId().toString());
             context.setVariable("externalReference", paymentEvent.externalReference());
-
 
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -127,6 +130,20 @@ public class EmailServiceImpl implements EmailService {
             helper.setTo(paymentEvent.userEmail());
             helper.setSubject(transactionNotificationSubject);
             helper.setText(htmlContent, true);
+
+            // 📎 SOLO AGREGAR ESTAS LÍNEAS PARA EL PDF
+            try {
+                byte[] pdfBytes = jasperReportService.generatePaymentReceiptPdf(paymentEvent);
+                String fileName = String.format("Comprobante_FitDesk_%s.pdf",
+                        paymentEvent.externalReference().replaceAll("[^a-zA-Z0-9]", "_"));
+
+                helper.addAttachment(fileName, new ByteArrayResource(pdfBytes), "application/pdf");
+                log.info("📄 PDF adjuntado: {} ({} bytes)", fileName, pdfBytes.length);
+
+            } catch (Exception e) {
+                log.error("❌ Error generando PDF: {}", e.getMessage(), e);
+                // Continúa enviando email sin PDF si hay error
+            }
 
             mailSender.send(message);
             log.info("📧 Email de notificación de transacción enviado exitosamente a: {} - Plan: {} - Monto: ${}",

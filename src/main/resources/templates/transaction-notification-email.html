@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transacción Aprobada - FitDesk</title>
+    <title>Pago Aprobado - FitDesk</title>
     <style>
         * {
             margin: 0;
@@ -20,7 +20,7 @@
         }
         
         .email-container {
-            max-width: 680px;
+            max-width: 600px;
             margin: 0 auto;
             background-color: #ffffff;
             border-radius: 16px;
@@ -31,255 +31,174 @@
         
         .header {
             background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
-            padding: 50px 40px;
+            padding: 40px 30px;
             text-align: center;
             color: white;
             position: relative;
         }
         
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="3" fill="rgba(255,255,255,0.05)"/><circle cx="40" cy="80" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
-        }
-        
         .success-icon {
-            font-size: 70px;
-            margin-bottom: 20px;
+            font-size: 60px;
+            margin-bottom: 15px;
             animation: bounce 2s infinite;
-            position: relative;
-            z-index: 1;
         }
         
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
         }
         
         .header h1 {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 12px;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 10px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .header p {
-            font-size: 18px;
+            font-size: 16px;
             opacity: 0.95;
-            position: relative;
-            z-index: 1;
         }
         
         .content {
-            padding: 50px 40px;
+            padding: 40px 30px;
         }
         
         .greeting {
             font-size: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             color: #2c3e50;
             font-weight: 600;
-        }
-        
-        .intro-text {
-            font-size: 16px;
-            color: #6c757d;
-            margin-bottom: 35px;
             text-align: center;
         }
         
-        .transaction-card {
+        .summary-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 40px;
+            padding: 30px;
             border-radius: 16px;
             text-align: center;
-            margin: 35px 0;
+            margin: 25px 0;
             box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .transaction-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: shimmer 3s ease-in-out infinite;
-        }
-        
-        @keyframes shimmer {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(180deg); }
         }
         
         .plan-name {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 10px;
         }
         
         .amount {
-            font-size: 42px;
+            font-size: 36px;
             font-weight: 800;
-            margin: 25px 0;
-            position: relative;
-            z-index: 1;
+            margin: 15px 0;
             text-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
         
-        .plan-details {
-            background-color: rgba(255,255,255,0.15);
-            padding: 25px;
-            border-radius: 12px;
-            margin-top: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .plan-details strong {
-            font-weight: 600;
-        }
-        
-        .details-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin: 40px 0;
-        }
-        
-        .detail-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            padding: 25px;
-            border-radius: 12px;
-            border-left: 5px solid #28a745;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .detail-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-        }
-        
-        .detail-card h3 {
-            color: #2c3e50;
+        .duration {
             font-size: 16px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            font-weight: 600;
-        }
-        
-        .detail-card p {
-            color: #495057;
-            font-weight: 600;
-            font-size: 15px;
-            font-family: 'Segoe UI', monospace;
-        }
-        
-        .transaction-details {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-            border: 1px solid #f0c674;
-            padding: 30px;
-            border-radius: 12px;
-            margin: 40px 0;
-            box-shadow: 0 4px 16px rgba(240, 198, 116, 0.2);
-        }
-        
-        .transaction-details h3 {
-            color: #856404;
-            margin-bottom: 20px;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            font-weight: 700;
-        }
-        
-        .transaction-details h3::before {
-            content: "🧾";
-            margin-right: 12px;
-            font-size: 24px;
-        }
-        
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(133, 100, 4, 0.2);
-        }
-        
-        .transaction-item:last-child {
-            border-bottom: none;
-        }
-        
-        .transaction-label {
-            font-weight: 600;
-            color: #856404;
-            font-size: 15px;
-        }
-        
-        .transaction-value {
-            color: #6f5f00;
-            font-family: 'Segoe UI', monospace;
-            font-weight: 600;
-            font-size: 14px;
-            background: rgba(255,255,255,0.7);
-            padding: 4px 8px;
-            border-radius: 6px;
+            margin-bottom: 15px;
+            opacity: 0.9;
         }
         
         .status-approved {
-            color: #28a745 !important;
-            font-weight: 700 !important;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .brief-details {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+        }
+        
+        .brief-details h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 10px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .detail-value {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .pdf-notice {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 1px solid #f0c674;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(240, 198, 116, 0.2);
+        }
+        
+        .pdf-notice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .pdf-notice p {
+            color: #6f5f00;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .pdf-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            display: block;
         }
         
         .next-steps {
             background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            padding: 30px;
+            padding: 25px;
             border-radius: 12px;
-            margin: 40px 0;
+            margin: 30px 0;
             border: 1px solid #90caf9;
-            box-shadow: 0 4px 16px rgba(33, 150, 243, 0.1);
         }
         
         .next-steps h3 {
             color: #0d47a1;
-            margin-bottom: 20px;
-            font-size: 20px;
+            margin-bottom: 15px;
+            font-size: 18px;
             display: flex;
             align-items: center;
-            font-weight: 700;
-        }
-        
-        .next-steps h3::before {
-            content: "🚀";
-            margin-right: 12px;
-            font-size: 24px;
+            gap: 10px;
         }
         
         .steps-list {
@@ -288,44 +207,27 @@
         }
         
         .steps-list li {
-            padding: 10px 0;
+            padding: 8px 0;
             color: #1565c0;
             position: relative;
-            padding-left: 35px;
+            padding-left: 30px;
             font-weight: 500;
-            transition: color 0.3s ease;
         }
         
         .steps-list li::before {
             content: "✅";
             position: absolute;
             left: 0;
-            font-size: 18px;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        .steps-list li:hover {
-            color: #0d47a1;
+            font-size: 16px;
         }
         
         .support-section {
             text-align: center;
             color: #6c757d;
-            margin-top: 40px;
-            padding: 25px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
             border-radius: 12px;
-            border: 1px solid #dee2e6;
-        }
-        
-        .support-section p {
-            margin-bottom: 15px;
-            font-size: 16px;
         }
         
         .contact-info {
@@ -348,116 +250,44 @@
         .footer {
             background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: #bdc3c7;
-            padding: 40px;
+            padding: 30px;
             text-align: center;
             font-size: 14px;
         }
         
         .footer-logo {
             color: #ecf0f1;
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
         }
         
-        .footer-logo::before {
-            content: "🏋️";
-            font-size: 30px;
-        }
-        
         .footer p {
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
-        
-        .footer-links {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #475563;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .social-link {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
-        
-        .social-link:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
+            margin-bottom: 5px;
+            line-height: 1.4;
         }
         
         @media (max-width: 600px) {
-            .email-container {
-                margin: 10px;
-                border-radius: 12px;
-            }
-            
-            .header {
-                padding: 40px 20px;
-            }
-            
-            .content {
-                padding: 30px 20px;
-            }
-            
-            .details-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .amount {
-                font-size: 32px;
-            }
-            
-            .header h1 {
-                font-size: 26px;
-            }
-            
-            .transaction-card {
-                padding: 30px 20px;
-            }
-            
-            .contact-info {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.8s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            .email-container { margin: 10px; }
+            .header { padding: 30px 20px; }
+            .content { padding: 30px 20px; }
+            .amount { font-size: 28px; }
+            .header h1 { font-size: 24px; }
+            .contact-info { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
 <body>
-    <div class="email-container fade-in">
+    <div class="email-container">
         <!-- Header -->
         <div class="header">
             <div class="success-icon">🎉</div>
-            <h1>¡Transacción Aprobada!</h1>
-            <p>Tu pago ha sido procesado exitosamente</p>
+            <h1>¡Pago Aprobado!</h1>
+            <p>Tu transacción fue procesada exitosamente</p>
         </div>
         
         <!-- Content -->
@@ -466,75 +296,59 @@
                 ¡Hola <strong th:text="${userName}">Usuario</strong>! 👋
             </div>
             
-            <div class="intro-text">
-                Te confirmamos que tu transacción ha sido procesada exitosamente.<br>
-                Aquí tienes todos los detalles de tu compra:
-            </div>
-            
-            <!-- Transaction Card -->
-            <div class="transaction-card">
+            <!-- Summary Card -->
+            <div class="summary-card">
                 <div class="plan-name" th:text="${planName}">Plan Premium</div>
                 <div class="amount">$<span th:text="${amount}">29.99</span></div>
-                
-                <div class="plan-details">
-                    <strong>📅 Duración:</strong> <span th:text="${durationMonths}">1</span> mes(es)<br>
-                    <strong>⏰ Vigencia:</strong> <span th:text="${planStartDate}">01/01/2024</span> al <span th:text="${planEndDate}">01/02/2024</span>
+                <div class="duration">Duración: <span th:text="${durationMonths}">1</span> mes(es)</div>
+                <div class="status-approved">
+                    <span>✅</span> PAGO APROBADO
                 </div>
             </div>
             
-            <!-- Details Grid -->
-            <div class="details-grid">
-                <div class="detail-card">
-                    <h3>📅 Fecha de Pago</h3>
-                    <p th:text="${paymentDate}">10/10/2024 14:30</p>
+            <!-- Brief Details -->
+            <div class="brief-details">
+                <h3>📋 Resumen de la Transacción</h3>
+                <div class="detail-row">
+                    <span class="detail-label">Fecha de Pago:</span>
+                    <span class="detail-value" th:text="${paymentDate}">10/10/2024 14:30</span>
                 </div>
-                
-                <div class="detail-card">
-                    <h3>💳 ID MercadoPago</h3>
-                    <p th:text="${transactionId}">MP-123456789</p>
+                <div class="detail-row">
+                    <span class="detail-label">ID de Transacción:</span>
+                    <span class="detail-value" th:text="${transactionId}">MP-123456789</span>
                 </div>
-            </div>
-            
-            <!-- Transaction Details -->
-            <div class="transaction-details">
-                <h3>Detalles Completos de la Transacción</h3>
-                <div class="transaction-item">
-                    <span class="transaction-label">🆔 ID de Pago:</span>
-                    <span class="transaction-value" th:text="${paymentId}">payment-uuid-123</span>
-                </div>
-                <div class="transaction-item">
-                    <span class="transaction-label">📋 Referencia Externa:</span>
-                    <span class="transaction-value" th:text="${externalReference}">REF-123456</span>
-                </div>
-                <div class="transaction-item">
-                    <span class="transaction-label">📧 Email de Confirmación:</span>
-                    <span class="transaction-value" th:text="${userEmail}">usuario@email.com</span>
-                </div>
-                <div class="transaction-item">
-                    <span class="transaction-label">✅ Estado del Pago:</span>
-                    <span class="transaction-value status-approved">
-                        <span>✅</span> APROBADO
+                <div class="detail-row">
+                    <span class="detail-label">Vigencia del Plan:</span>
+                    <span class="detail-value">
+                        <span th:text="${planStartDate}">01/01/2024</span> al 
+                        <span th:text="${planEndDate}">01/02/2024</span>
                     </span>
                 </div>
             </div>
             
+            <!-- PDF Notice -->
+            <div class="pdf-notice">
+                <span class="pdf-icon">📄</span>
+                <h3>💼 Comprobante Detallado</h3>
+                <p><strong>¿Necesitas el comprobante completo?</strong></p>
+                <p>Hemos adjuntado un PDF con todos los detalles de tu transacción, incluyendo información fiscal y detalles completos de la boleta.</p>
+                <p><em>📎 Revisa los archivos adjuntos de este email</em></p>
+            </div>
+            
             <!-- Next Steps -->
             <div class="next-steps">
-                <h3>¿Qué puedes hacer ahora?</h3>
+                <h3>🚀 ¿Qué sigue ahora?</h3>
                 <ul class="steps-list">
-                    <li>Tu membresía ya está activa y lista para usar</li>
-                    <li>Puedes acceder al gimnasio desde hoy mismo</li>
-                    <li>Descarga nuestra app móvil para seguir tu progreso</li>
-                    <li>Consulta los horarios de nuestras clases grupales</li>
-                    <li>Agenda tu primera sesión de evaluación física gratuita</li>
-                    <li>Únete a nuestra comunidad online de fitness</li>
+                    <li>Tu membresía está activa desde hoy</li>
+                    <li>Descarga nuestra app móvil</li>
+                    <li>Agenda tu primera sesión gratuita</li>
+                    <li>Explora nuestras clases grupales</li>
                 </ul>
             </div>
             
             <!-- Support Section -->
             <div class="support-section">
-                <p><strong>¿Necesitas ayuda o tienes alguna pregunta?</strong></p>
-                <p>Nuestro equipo de soporte está aquí para ayudarte</p>
+                <p><strong>¿Necesitas ayuda?</strong></p>
                 <div class="contact-info">
                     <div class="contact-item">
                         <span>📞</span> +1 (555) 123-4567
@@ -542,32 +356,18 @@
                     <div class="contact-item">
                         <span>📧</span> soporte@fitdesk.com
                     </div>
-                    <div class="contact-item">
-                        <span>💬</span> Chat en vivo 24/7
-                    </div>
                 </div>
             </div>
         </div>
         
         <!-- Footer -->
         <div class="footer">
-            <div class="footer-logo">FitDesk</div>
+            <div class="footer-logo">🏋️ FitDesk</div>
             <p><strong>Tu compañero de fitness de confianza</strong></p>
-            <p>Transformando vidas a través del ejercicio y la nutrición</p>
             <p>© <span th:text="${currentYear}">2024</span> FitDesk. Todos los derechos reservados.</p>
-            
-            <div class="footer-links">
-                <div class="social-links">
-                    <div class="social-link">📘</div>
-                    <div class="social-link">📸</div>
-                    <div class="social-link">🐦</div>
-                    <div class="social-link">💼</div>
-                </div>
-                <p style="margin-top: 20px; font-size: 12px; opacity: 0.8;">
-                    Este es un mensaje automático generado por el sistema.<br>
-                    Por favor, no respondas directamente a este correo.
-                </p>
-            </div>
+            <p style="margin-top: 15px; font-size: 12px; opacity: 0.8;">
+                Este es un mensaje automático. No respondas a este correo.
+            </p>
         </div>
     </div>
 </body>

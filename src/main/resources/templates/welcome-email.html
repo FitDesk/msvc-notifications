@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a FitDesk</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 15px 0;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .email-wrapper {
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e8ecef;
+        }
+
+        /* Header compacto */
+        .header {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF8C42 50%, #FF6B00 100%);
+            position: relative;
+            padding: 30px 20px;
+            text-align: center;
+            overflow: hidden;
+            min-height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M 8 0 L 0 0 0 8" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        /* Logo container compacto */
+        .logo-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(255,255,255,0.95);
+            padding: 20px 45px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.4);
+            width: 90%;
+            max-width: 450px;
+        }
+
+        .logo-svg {
+            width: 200px;
+            height: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+            margin-bottom: 8px;
+        }
+
+        .company-tagline {
+            color: #2c3e50;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Contenido compacto */
+        .content {
+            padding: 40px 35px;
+            background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+        }
+
+        .welcome-badge {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF8C42 100%);
+            color: white;
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+        }
+
+        .main-title {
+            color: #2c3e50;
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+            margin: 20px 0 15px;
+            line-height: 1.2;
+        }
+
+        .highlight-name {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF8C42 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+        }
+
+        .subtitle {
+            color: #6c757d;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .welcome-content {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 25px;
+            border-radius: 16px;
+            border-left: 5px solid #FF6B00;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .welcome-content h3 {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .welcome-content p {
+            color: #495057;
+            margin: 12px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .highlight-text {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF8C42 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Servicios compactos */
+        .services-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 30px 25px;
+            border-radius: 16px;
+            margin: 25px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .services-title {
+            color: #2c3e50;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .services-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(135deg, #FF6B00 0%, #FF8C42 100%);
+            border-radius: 2px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .service-item {
+            background: white;
+            padding: 20px 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border-left: 4px solid #FF6B00;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .service-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 12px;
+            fill: #FF6B00;
+        }
+
+        .service-title {
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .service-description {
+            color: #6c757d;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* Mensaje profesional compacto */
+        .professional-message {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            border: 2px solid #d4edda;
+            padding: 25px;
+            border-radius: 16px;
+            margin: 25px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .professional-message::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid #d4edda;
+        }
+
+        .target-icon {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            fill: #FF6B00;
+        }
+
+        .professional-message h4 {
+            color: #155724;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            margin-top: 8px;
+        }
+
+        .professional-message p {
+            color: #495057;
+            margin: 8px 0;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* Footer compacto */
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #bdc3c7;
+            padding: 30px 25px;
+            text-align: center;
+            font-size: 13px;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FF6B00, transparent);
+        }
+
+        .footer-logo {
+            color: #ecf0f1;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .footer-logo-icon {
+            width: 25px;
+            height: 25px;
+            fill: #ecf0f1;
+        }
+
+        .footer-description {
+            color: #95a5a6;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .contact-info {
+            background: rgba(255,255,255,0.08);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .contact-info h5 {
+            color: #FF6B00;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .contact-info p {
+            font-size: 12px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 107, 0, 0.15);
+            border: 2px solid rgba(255, 107, 0, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            padding: 8px;
+        }
+
+        .social-icon:hover {
+            background: #FF6B00;
+            border-color: #FF6B00;
+            transform: translateY(-2px);
+        }
+
+        .social-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: #bdc3c7;
+            transition: fill 0.3s ease;
+        }
+
+        .social-icon:hover svg {
+            fill: white;
+        }
+
+        .disclaimer {
+            font-size: 11px;
+            color: #7f8c8d;
+            margin-top: 20px;
+            line-height: 1.5;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .email-wrapper {
+                margin: 10px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .main-title {
+                font-size: 26px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .logo-svg {
+                width: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <!-- Header compacto -->
+        <div class="header">
+            <div class="logo-container">
+                <svg class="logo-svg" viewBox="0 0 1400 1200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#FF6B00;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#FF8C42;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#FF6B00;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="1400" height="1200" fill="white"/>
+                    <path d="M431.847 633.659C431.22 632.841 431.342 632.237 431.418 631.679C431.94 627.58 430.256 624.514 426.865 622.401C422.232 619.515 417.087 617.779 411.925 616.124C403.703 613.488 395.714 610.37 388.676 605.208C385.732 603.048 383.468 600.33 381.674 597.189C379.659 593.67 379.897 590.099 381.749 586.662C382.986 584.368 384.513 582.202 386.569 580.536C392.062 576.077 396.37 570.7 399.453 564.33C399.86 563.488 400.086 562.484 401.114 561.868C402.089 562.809 401.723 564.034 401.689 565.085C401.52 569.875 402.176 574.561 403.692 579.079C406.212 586.592 411.745 591.394 418.527 594.982C423.562 597.648 428.683 600.162 433.125 603.826C437.271 607.246 439.849 611.502 440.505 616.85C440.824 619.433 439.878 621.826 438.978 624.16C437.532 627.923 435.128 631.006 431.859 633.659H431.847Z" fill="url(#logoGradient)"/>
+                    <path d="M584.892 544.551V652H564.598V544.551H584.892ZM628.211 590.97V606.984H579.579V590.97H628.211ZM633.893 544.551V560.565H579.579V544.551H633.893ZM666.881 572.151V652H647.324V572.151H666.881ZM645.996 551.267C645.996 548.364 646.98 545.953 648.948 544.035C650.965 542.116 653.671 541.156 657.066 541.156C660.46 541.156 663.142 542.116 665.11 544.035C667.127 545.953 668.135 548.364 668.135 551.267C668.135 554.12 667.127 556.506 665.11 558.425C663.142 560.344 660.46 561.303 657.066 561.303C653.671 561.303 650.965 560.344 648.948 558.425C646.98 556.506 645.996 554.12 645.996 551.267ZM723.262 572.151V586.173H677.508V572.151H723.262ZM689.758 552.521H709.314V628.975C709.314 631.337 709.634 633.157 710.274 634.436C710.913 635.715 711.873 636.576 713.152 637.019C714.431 637.462 715.956 637.683 717.727 637.683C719.006 637.683 720.187 637.61 721.269 637.462C722.352 637.314 723.262 637.167 724 637.019L724.074 651.631C722.45 652.172 720.605 652.615 718.539 652.959C716.522 653.304 714.234 653.476 711.676 653.476C707.297 653.476 703.46 652.738 700.163 651.262C696.867 649.737 694.309 647.302 692.488 643.956C690.668 640.561 689.758 636.084 689.758 630.525V552.521ZM769.828 652H746.656L746.803 636.06H769.828C776.076 636.06 781.316 634.682 785.547 631.927C789.778 629.123 792.976 625.113 795.14 619.898C797.305 614.634 798.388 608.337 798.388 601.006V595.471C798.388 589.813 797.773 584.82 796.543 580.49C795.313 576.161 793.492 572.52 791.082 569.568C788.72 566.617 785.793 564.378 782.3 562.853C778.807 561.328 774.797 560.565 770.271 560.565H746.213V544.551H770.271C777.454 544.551 783.997 545.756 789.901 548.167C795.854 550.578 800.995 554.046 805.324 558.573C809.703 563.05 813.049 568.412 815.361 574.66C817.722 580.909 818.903 587.895 818.903 595.619V601.006C818.903 608.681 817.722 615.667 815.361 621.964C813.049 628.213 809.703 633.575 805.324 638.052C800.995 642.529 795.829 645.973 789.827 648.384C783.825 650.795 777.159 652 769.828 652ZM758.02 544.551V652H737.726V544.551H758.02ZM870.561 653.476C864.51 653.476 859.074 652.492 854.252 650.524C849.431 648.556 845.323 645.826 841.928 642.333C838.582 638.79 836 634.682 834.179 630.008C832.408 625.285 831.523 620.218 831.523 614.806V611.854C831.523 605.704 832.408 600.12 834.179 595.102C835.95 590.035 838.459 585.681 841.707 582.04C844.954 578.399 848.84 575.595 853.367 573.627C857.893 571.659 862.886 570.675 868.347 570.675C874.005 570.675 878.999 571.635 883.328 573.553C887.658 575.423 891.274 578.08 894.176 581.524C897.079 584.967 899.268 589.1 900.744 593.922C902.22 598.694 902.958 603.983 902.958 609.788V617.979H840.378V604.548H883.771V603.072C883.673 599.973 883.082 597.144 882 594.586C880.918 591.978 879.245 589.912 876.982 588.387C874.719 586.812 871.791 586.025 868.2 586.025C865.297 586.025 862.763 586.665 860.599 587.944C858.483 589.174 856.712 590.945 855.285 593.257C853.908 595.52 852.875 598.226 852.186 601.375C851.497 604.524 851.153 608.017 851.153 611.854V614.806C851.153 618.152 851.595 621.251 852.481 624.105C853.416 626.958 854.769 629.443 856.54 631.558C858.36 633.624 860.525 635.248 863.034 636.429C865.592 637.56 868.495 638.126 871.742 638.126C875.826 638.126 879.515 637.339 882.812 635.765C886.157 634.141 889.06 631.755 891.52 628.606L901.335 638.79C899.662 641.25 897.399 643.612 894.545 645.875C891.741 648.138 888.346 649.983 884.361 651.41C880.376 652.787 875.776 653.476 870.561 653.476ZM959.93 630.156C959.93 628.483 959.487 626.983 958.602 625.654C957.716 624.326 956.043 623.121 953.583 622.038C951.173 620.907 947.63 619.849 942.956 618.865C938.824 617.979 935.011 616.872 931.518 615.544C928.025 614.216 925.024 612.617 922.515 610.747C920.006 608.829 918.038 606.59 916.611 604.032C915.233 601.424 914.545 598.423 914.545 595.028C914.545 591.732 915.258 588.633 916.685 585.73C918.111 582.778 920.178 580.195 922.884 577.981C925.59 575.718 928.886 573.947 932.772 572.668C936.659 571.34 941.038 570.675 945.908 570.675C952.698 570.675 958.528 571.782 963.398 573.996C968.318 576.21 972.082 579.26 974.689 583.147C977.297 586.985 978.601 591.314 978.601 596.135H959.118C959.118 594.02 958.626 592.101 957.642 590.379C956.707 588.657 955.256 587.28 953.288 586.247C951.32 585.164 948.836 584.623 945.835 584.623C943.129 584.623 940.841 585.066 938.971 585.951C937.151 586.837 935.774 587.993 934.839 589.42C933.904 590.847 933.437 592.421 933.437 594.143C933.437 595.422 933.683 596.578 934.175 597.611C934.716 598.595 935.577 599.506 936.758 600.342C937.938 601.178 939.537 601.941 941.554 602.63C943.621 603.318 946.154 603.983 949.155 604.622C955.108 605.803 960.299 607.377 964.727 609.345C969.204 611.264 972.697 613.822 975.206 617.02C977.715 620.218 978.97 624.301 978.97 629.27C978.97 632.813 978.207 636.06 976.682 639.012C975.157 641.914 972.943 644.448 970.04 646.613C967.137 648.778 963.669 650.475 959.635 651.705C955.6 652.886 951.05 653.476 945.982 653.476C938.652 653.476 932.453 652.172 927.385 649.565C922.318 646.908 918.48 643.563 915.873 639.528C913.265 635.445 911.962 631.214 911.962 626.835H930.632C930.78 629.935 931.616 632.419 933.141 634.289C934.667 636.158 936.585 637.511 938.898 638.347C941.259 639.135 943.744 639.528 946.351 639.528C949.303 639.528 951.788 639.135 953.805 638.347C955.822 637.511 957.347 636.404 958.38 635.027C959.413 633.6 959.93 631.976 959.93 630.156ZM1013.29 538.574V652H993.803V538.574H1013.29ZM1063.32 572.151L1028.56 611.19L1009.74 630.304L1003.54 615.175L1018.08 596.873L1039.78 572.151H1063.32ZM1043.39 652L1018.67 614.806L1031.66 602.187L1065.98 652H1043.39Z" fill="#2c3e50"/>
+                </svg>
+                <div class="company-tagline">Fitness Professional Platform</div>
+            </div>
+        </div>
+
+        <!-- Contenido -->
+        <div class="content">
+            <div style="text-align: center;">
+                <span class="welcome-badge">¡Bienvenido a la Plataforma!</span>
+            </div>
+
+            <h1 class="main-title">
+                Hola <span class="highlight-name" th:text="${firstName}">Usuario</span>,<br>
+                ¡Tu cuenta está lista!
+            </h1>
+            
+            <p class="subtitle">🚀 Comienza tu transformación fitness profesional</p>
+
+            <div class="welcome-content">
+                <h3>¡Excelente elección!</h3>
+                <p>Tu cuenta en <span class="highlight-text">FitDesk</span> ha sido creada exitosamente. Ahora formas parte de nuestra comunidad fitness profesional.</p>
+                <p>Estamos aquí para acompañarte en cada paso, brindándote las herramientas más avanzadas del mercado.</p>
+            </div>
+
+            <!-- Servicios con SVGs locales -->
+            <div class="services-section">
+                <h3 class="services-title">¿Qué puedes hacer ahora?</h3>
+                <div class="services-grid">
+                    <div class="service-item">
+                        <svg class="service-icon" viewBox="0 0 721.285 721.285" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M235.647,58.741l-46.446-45.08L202.861,0l46.446,45.08L235.647,58.741z M60.79,148.901l46.446,45.081l13.661-13.661L74.451,135.24L60.79,148.901z M530.718,13.661L517.058,0L470.61,45.08l13.662,13.661L530.718,13.661z M645.468,133.875l-45.08,46.446l13.66,13.661l46.447-45.081L645.468,133.875z M629.075,117.482l-17.758,16.393l-21.857-21.857c4.098-9.563,2.732-20.491-5.465-28.688s-19.125-9.563-28.688-5.464l-27.322-28.688l19.125-19.125l-13.66-13.661l-46.445,45.081l13.66,13.661l19.125-19.125l27.322,27.321l-92.895,94.259H265.701l-92.893-92.893l27.321-27.321L217.888,76.5l13.661-13.661l-45.081-45.08L172.807,31.42l17.759,19.125l-27.321,27.321c-9.563-4.098-20.491-2.732-28.688,5.464c-5.464,5.464-8.196,13.661-6.83,21.857c0,2.732,1.366,5.464,2.732,6.83l-21.857,21.857l-17.759-16.393l-13.661,13.661l46.446,45.081l13.662-13.66l-20.491-20.491l20.491-20.492l144.803,148.902v416.652c0,19.125,15.027,34.151,34.152,34.151s34.152-15.026,34.152-34.151V408.455h19.125v278.679c0,19.125,15.025,34.151,34.15,34.151s34.152-15.026,34.152-34.151V270.482l146.17-148.902l20.49,20.491l-20.49,20.491l13.66,13.661l46.447-45.081L629.075,117.482z M359.959,159.83c34.151,0,62.838-28.688,62.838-62.839s-28.688-62.839-62.838-62.839c-34.152,0-62.839,28.688-62.839,62.839S325.808,159.83,359.959,159.83z"/>
+                        </svg>
+                        <div class="service-title">Entrenamientos</div>
+                        <div class="service-description">Planes personalizados para tus objetivos</div>
+                    </div>
+                    
+                    <div class="service-item">
+                        <svg class="service-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.998 5h-0.987v23h20v-0.963l-18.996-0.049-0.017-21.988zM8.011 25h5v-10.875l-5 5v5.875zM14.011 25h5v-9.875l-2 2-3-3v10.875zM20.011 25h5v-15.187l-5 5v10.187zM13.387 11.067l3.62 3.6 7.148-7.112 1.834 1.844-0.044-4.399-4.415 0.023 1.717 1.722-6.242 6.26-3.689-3.703-5.623 5.604 0.939 0.912 4.755-4.751z"/>
+                        </svg>
+                        <div class="service-title">Analytics</div>
+                        <div class="service-description">Seguimiento detallado de tu progreso</div>
+                    </div>
+                    
+                    <div class="service-item">
+                        <svg class="service-icon" viewBox="0 -6 44 44" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M42.001,32.000 L14.010,32.000 C12.908,32.000 12.010,31.104 12.010,30.001 L12.010,28.002 C12.010,27.636 12.211,27.300 12.532,27.124 L22.318,21.787 C19.040,18.242 19.004,13.227 19.004,12.995 L19.010,7.002 C19.010,6.946 19.015,6.891 19.024,6.837 C19.713,2.751 24.224,0.007 28.005,0.007 C28.006,0.007 28.008,0.007 28.009,0.007 C31.788,0.007 36.298,2.749 36.989,6.834 C36.998,6.889 37.003,6.945 37.003,7.000 L37.006,12.994 C37.006,13.225 36.970,18.240 33.693,21.785 L43.479,27.122 C43.800,27.298 44.000,27.634 44.000,28.000 L44.000,30.001 C44.000,31.104 43.103,32.000 42.001,32.000 Z"/>
+                        </svg>
+                        <div class="service-title">Comunidad</div>
+                        <div class="service-description">Conecta con otros profesionales</div>
+                    </div>
+                    
+                    <div class="service-item">
+                        <svg class="service-icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="30" cy="35" rx="12" ry="18" fill="#FF6B00"/>
+                            <ellipse cx="25" cy="20" rx="3" ry="8" fill="#4CAF50"/>
+                            <ellipse cx="30" cy="18" rx="3" ry="8" fill="#4CAF50"/>
+                            <ellipse cx="35" cy="20" rx="3" ry="8" fill="#4CAF50"/>
+                        </svg>
+                        <div class="service-title">Nutrición</div>
+                        <div class="service-description">Planes alimenticios personalizados</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensaje profesional -->
+            <div class="professional-message">
+                <svg class="target-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" fill="none" stroke="#FF6B00" stroke-width="2"/>
+                    <circle cx="20" cy="20" r="12" fill="none" stroke="#FF6B00" stroke-width="2"/>
+                    <circle cx="20" cy="20" r="6" fill="#FF6B00"/>
+                </svg>
+                <h4>Compromiso con la Excelencia</h4>
+                <p><strong>En FitDesk, tu éxito es nuestro éxito.</strong> Nuestro equipo está disponible 24/7 para brindarte el soporte que necesitas.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">
+                <svg class="footer-logo-icon" viewBox="0 0 721.285 721.285" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M359.959,159.83c34.151,0,62.838-28.688,62.838-62.839s-28.688-62.839-62.838-62.839c-34.152,0-62.839,28.688-62.839,62.839S325.808,159.83,359.959,159.83z"/>
+                    <rect x="340" y="120" width="40" height="8" rx="4"/>
+                    <rect x="330" y="125" width="60" height="8" rx="4"/>
+                </svg>
+                FitDesk
+            </div>
+            <div class="footer-description">Tu plataforma fitness profesional</div>
+            
+            <div class="contact-info">
+                <h5>📞 Soporte 24/7</h5>
+                <p>soporte@fitdesk.com | +1 (555) 123-4567</p>
+            </div>
+            
+            <div class="social-icons">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M24,12.073c0,5.989-4.394,10.954-10.13,11.855v-8.363h2.789l0.531-3.46H13.87V9.86c0-0.947,0.464-1.869,1.95-1.869h1.509V5.045c0,0-1.37-0.234-2.679-0.234c-2.734,0-4.52,1.657-4.52,4.656v2.637H7.091v3.46h3.039v8.363C4.395,23.025,0,18.061,0,12.073c0-6.627,5.373-12,12-12S24,5.445,24,12.073z"/>
+                    </svg>
+                </div>
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12,2.162c3.204,0,3.584,0.012,4.849,0.07c1.308,0.06,2.655,0.358,3.608,1.311c0.962,0.962,1.251,2.296,1.311,3.608c0.058,1.265,0.07,1.645,0.07,4.849c0,3.204-0.012,3.584-0.07,4.849c-0.059,1.301-0.364,2.661-1.311,3.608c-0.962,0.962-2.295,1.251-3.608,1.311c-1.265,0.058-1.645,0.07-4.849,0.07s-3.584-0.012-4.849-0.07c-1.291-0.059-2.669-0.371-3.608-1.311c-0.957-0.957-1.251-2.304-1.311-3.608c-0.058-1.265-0.07-1.645-0.07-4.849c0-3.204,0.012-3.584,0.07-4.849c0.059-1.296,0.367-2.664,1.311-3.608c0.96-0.96,2.299-1.251,3.608-1.311C8.416,2.174,8.796,2.162,12,2.162 M12,0C8.741,0,8.332,0.014,7.052,0.072C5.197,0.157,3.355,0.673,2.014,2.014C0.668,3.36,0.157,5.198,0.072,7.052C0.014,8.332,0,8.741,0,12c0,3.259,0.014,3.668,0.072,4.948c0.085,1.853,0.603,3.7,1.942,5.038c1.345,1.345,3.186,1.857,5.038,1.942C8.332,23.986,8.741,24,12,24c3.259,0,3.668-0.014,4.948-0.072c1.854-0.085,3.698-0.602,5.038-1.942c1.347-1.347,1.857-3.184,1.942-5.038C23.986,15.668,24,15.259,24,12c0-3.259-0.014-3.668-0.072-4.948c-0.085-1.855-0.602-3.698-1.942-5.038c-1.343-1.343-3.189-1.858-5.038-1.942C15.668,0.014,15.259,0,12,0z"/>
+                        <path d="M12,5.838c-3.403,0-6.162,2.759-6.162,6.162c0,3.403,2.759,6.162,6.162,6.162s6.162-2.759,6.162-6.162C18.162,8.597,15.403,5.838,12,5.838z M12,16c-2.209,0-4-1.791-4-4s1.791-4,4-4s4,1.791,4,4S14.209,16,12,16z"/>
+                        <circle cx="18.406" cy="5.594" r="1.44"/>
+                    </svg>
+                </div>
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20.463,3.488C18.217,1.24,15.231,0.001,12.05,0C5.495,0,0.16,5.334,0.157,11.892c-0.001,2.096,0.547,4.142,1.588,5.946L0.057,24l6.304-1.654c1.737,0.948,3.693,1.447,5.683,1.448h0.005c6.554,0,11.89-5.335,11.893-11.893C23.944,8.724,22.708,5.735,20.463,3.488z M12.05,21.785h-0.004c-1.774,0-3.513-0.477-5.031-1.378l-0.361-0.214l-3.741,0.981l0.999-3.648l-0.235-0.374c-0.99-1.574-1.512-3.393-1.511-5.26c0.002-5.45,4.437-9.884,9.889-9.884c2.64,0,5.122,1.03,6.988,2.898c1.866,1.869,2.893,4.352,2.892,6.993C21.932,17.351,17.498,21.785,12.05,21.785z M17.472,14.382c-0.297-0.149-1.758-0.868-2.031-0.967c-0.272-0.099-0.47-0.149-0.669,0.148s-0.767,0.967-0.941,1.166c-0.173,0.198-0.347,0.223-0.644,0.074c-0.297-0.149-1.255-0.462-2.39-1.475c-0.883-0.788-1.48-1.761-1.653-2.059s-0.018-0.458,0.13-0.606c0.134-0.133,0.297-0.347,0.446-0.521C9.87,9.97,9.919,9.846,10.019,9.647c0.099-0.198,0.05-0.372-0.025-0.521C9.919,8.978,9.325,7.515,9.078,6.92c-0.241-0.58-0.486-0.501-0.669-0.51C8.236,6.401,8.038,6.4,7.839,6.4c-0.198,0-0.52,0.074-0.792,0.372c-0.272,0.298-1.04,1.017-1.04,2.479c0,1.463,1.065,2.876,1.213,3.074c0.148,0.198,2.095,3.2,5.076,4.487c0.709,0.306,1.263,0.489,1.694,0.626c0.712,0.226,1.36,0.194,1.872,0.118c0.571-0.085,1.758-0.719,2.006-1.413c0.248-0.694,0.248-1.29,0.173-1.413C17.967,14.605,17.769,14.531,17.472,14.382z"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="disclaimer">
+                © <span th:text="${currentYear}">2024</span> FitDesk Platform. Todos los derechos reservados.<br>
+                FitDesk - Leading Fitness Technology Platform
+            </div>
+        </div>
+    </div>
+</body>
+</html>
