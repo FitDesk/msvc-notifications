@@ -25,7 +25,7 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
     @Override
     public byte[] generatePaymentReceiptPdf(PaymentApprovedEvent paymentEvent) {
         try {
-            log.info("📄 Generando PDF para: {}", paymentEvent.userName());
+            log.info("Generando PDF para: {}", paymentEvent.userName());
 
             // Crear contexto con datos del pago
             Context context = createPdfContext(paymentEvent);
@@ -38,12 +38,12 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
             HtmlConverter.convertToPdf(htmlContent, outputStream);
 
             byte[] pdfBytes = outputStream.toByteArray();
-            log.info("✅ PDF generado: {} bytes para {}", pdfBytes.length, paymentEvent.userName());
+            log.info(" PDF generado: {} bytes para {}", pdfBytes.length, paymentEvent.userName());
 
             return pdfBytes;
 
         } catch (Exception e) {
-            log.error("❌ Error generando PDF: {}", e.getMessage(), e);
+            log.error(" Error generando PDF: {}", e.getMessage(), e);
             throw new RuntimeException("Error generando PDF", e);
         }
     }
@@ -54,7 +54,6 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-        // ✅ SOLUCIÓN: Convertir OffsetDateTime a LocalDateTime
         LocalDateTime paymentDateTime = paymentEvent.paymentDate().toLocalDateTime();
 
         // Datos principales
@@ -66,17 +65,14 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
         context.setVariable("externalReference", paymentEvent.externalReference());
         context.setVariable("paymentId", paymentEvent.paymentId().toString());
 
-        // Datos del plan
         context.setVariable("planName", paymentEvent.planName());
         context.setVariable("durationMonths", paymentEvent.durationMonths());
         context.setVariable("amount", paymentEvent.amount());
 
-        // Fechas del plan - Usar paymentDateTime en lugar de startDate
         LocalDateTime endDate = paymentDateTime.plusMonths(paymentEvent.durationMonths());
         context.setVariable("planStartDate", paymentDateTime.toLocalDate().format(dateFormatter));
         context.setVariable("planEndDate", endDate.toLocalDate().format(dateFormatter));
 
-        // Total
         context.setVariable("totalAmount", paymentEvent.amount());
         context.setVariable("currentYear", LocalDateTime.now().getYear());
 
