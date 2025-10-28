@@ -2,7 +2,7 @@ package com.msvcnotifications.services.implemts;
 
 import com.msvcnotifications.events.PaymentApprovedEvent;
 import com.msvcnotifications.services.EmailService;
-import com.msvcnotifications.services.JasperReportService;
+import com.msvcnotifications.services.PdfGeneratorService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
-    private final JasperReportService jasperReportService; // ← SOLO AGREGAR ESTA LÍNEA
+    private final PdfGeneratorService pdfGeneratorService;
 
 
     @Value("${app.email.from}")
@@ -99,7 +99,6 @@ public class EmailServiceImpl implements EmailService {
         try {
             Context context = new Context();
 
-            // MISMOS DATOS QUE YA TENÍAS - SIN CAMBIOS
             context.setVariable("userName", paymentEvent.userName());
             context.setVariable("userEmail", paymentEvent.userEmail());
             context.setVariable("planName", paymentEvent.planName());
@@ -131,9 +130,9 @@ public class EmailServiceImpl implements EmailService {
             helper.setSubject(transactionNotificationSubject);
             helper.setText(htmlContent, true);
 
-            // 📎 SOLO AGREGAR ESTAS LÍNEAS PARA EL PDF
+            // 📎 CAMBIO: Usar nuevo servicio PdfGeneratorService
             try {
-                byte[] pdfBytes = jasperReportService.generatePaymentReceiptPdf(paymentEvent);
+                byte[] pdfBytes = pdfGeneratorService.generatePaymentReceiptPdf(paymentEvent); // ✅ CAMBIO
                 String fileName = String.format("Comprobante_FitDesk_%s.pdf",
                         paymentEvent.externalReference().replaceAll("[^a-zA-Z0-9]", "_"));
 

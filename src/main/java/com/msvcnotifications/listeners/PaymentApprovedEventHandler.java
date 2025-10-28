@@ -20,16 +20,16 @@ public class PaymentApprovedEventHandler {
     @Transactional
     public void handle(PaymentApprovedEvent payload) {
         try {
-            log.info("📧 Procesando notificación de transacción para: {} - Plan: {}", 
+            log.info("Procesando notificación de transacción para: {} - Plan: {}", 
                     payload.userEmail(), payload.planName());
             
             emailService.sendTransactionNotificationEmail(payload);
             
-            log.info("✅ Email de transacción enviado exitosamente a: {} por ${}", 
+            log.info("Email de transacción enviado exitosamente a: {} por ${}", 
                     payload.userEmail(), payload.amount());
             
         } catch (Exception e) {
-            log.error("❌ Error procesando notificación de transacción para {}: {}", 
+            log.error("Error procesando notificación de transacción para {}: {}", 
                      payload.userEmail(), e.getMessage(), e);
         }
     }
