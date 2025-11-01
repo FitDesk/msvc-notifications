@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-//@KafkaListener(topics = "user-created-event-topic")
 @RequiredArgsConstructor
 @Slf4j
 public class RegisterUserEventHandler {

@@ -27,13 +27,10 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
         try {
             log.info("Generando PDF para: {}", paymentEvent.userName());
 
-            // Crear contexto con datos del pago
             Context context = createPdfContext(paymentEvent);
 
-            // Renderizar HTML desde template Thymeleaf
             String htmlContent = templateEngine.process("payment-receipt-pdf", context);
 
-            // Convertir HTML a PDF usando iText7
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             HtmlConverter.convertToPdf(htmlContent, outputStream);
 
@@ -56,7 +53,6 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
 
         LocalDateTime paymentDateTime = paymentEvent.paymentDate().toLocalDateTime();
 
-        // Datos principales
         context.setVariable("companyName", "FitDesk");
         context.setVariable("userName", paymentEvent.userName());
         context.setVariable("userEmail", paymentEvent.userEmail());
